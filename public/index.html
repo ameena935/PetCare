@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PetCare – Shelter &amp; Adoption Management</title>
+  <meta name="description" content="Register shelter pets, track adoptions and manage records.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🐾%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip" href="#showcase">Skip to pets</a>
+
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="PetCare home"><span class="brand-mark" aria-hidden="true">🐾</span>PetCare</a>
+    <nav aria-label="Sections">
+      <a href="#dashboard">Dashboard</a>
+      <a href="#showcase">Showcase</a>
+      <a href="#registry">Registry</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- HERO + METRICS -->
+    <section class="hero" id="dashboard">
+      <div class="hero-copy">
+        <h1>Every pet in the shelter, one clear register.</h1>
+        <p>Add new arrivals, mark adoptions the moment they happen, and see how many animals are still waiting for a home.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#registry">Register a pet</a>
+          <a class="btn btn-ghost" href="#showcase">Browse pets</a>
+        </div>
+      </div>
+
+      <div class="rate" aria-live="polite">
+        <div class="rate-ring" id="rateRing" role="img" aria-label="Adoption rate">
+          <span id="rateValue">0%</span>
+        </div>
+        <div>
+          <h2>Adoption rate</h2>
+          <p id="rateText">Loading shelter data…</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="metrics" aria-label="Shelter metrics">
+      <article class="metric">
+        <h3>Total pets</h3>
+        <p class="metric-value" id="mTotal" data-count="0">0</p>
+        <p class="metric-note">registered in the shelter</p>
+      </article>
+      <article class="metric metric-adopted">
+        <h3>Adopted</h3>
+        <p class="metric-value" id="mAdopted" data-count="0">0</p>
+        <p class="metric-note">found a home</p>
+      </article>
+      <article class="metric metric-available">
+        <h3>Available for adoption</h3>
+        <p class="metric-value" id="mAvailable" data-count="0">0</p>
+        <p class="metric-note">waiting for a family</p>
+      </article>
+      <article class="metric metric-popular">
+        <h3>Most popular species</h3>
+        <p class="metric-value metric-text" id="mPopular">–</p>
+        <p class="metric-note" id="mPopularNote">no pets yet</p>
+      </article>
+    </section>
+
+    <!-- SHOWCASE -->
+    <section class="panel" id="showcase" aria-labelledby="showcaseTitle">
+      <div class="panel-head">
+        <div>
+          <h2 id="showcaseTitle">Pet showcase</h2>
+          <p class="sub" id="showcaseCount">Loading pets…</p>
+        </div>
+        <label class="field field-inline">
+          <span>Sort by</span>
+          <select id="sortSelect">
+            <option value="newest">Newest first</option>
+            <option value="age">Youngest first</option>
+            <option value="name">Name (A–Z)</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="chips" role="group" aria-label="Filter by species" id="chips">
+        <button class="chip is-active" data-species="all" aria-pressed="true">All</button>
+        <button class="chip" data-species="dog" aria-pressed="false">Dogs</button>
+        <button class="chip" data-species="cat" aria-pressed="false">Cats</button>
+        <button class="chip" data-species="bird" aria-pressed="false">Birds</button>
+        <button class="chip" data-species="rabbit" aria-pressed="false">Rabbits</button>
+        <button class="chip" data-species="other" aria-pressed="false">Others</button>
+      </div>
+
+      <div class="grid" id="petGrid" aria-live="polite"></div>
+    </section>
+
+    <!-- REGISTRY -->
+    <section class="panel registry" id="registry" aria-labelledby="registryTitle">
+      <div class="registry-form">
+        <h2 id="registryTitle"><span id="formTitle">Register a pet</span></h2>
+        <p class="sub" id="formHint">Fill in the details and save. The pet appears in the showcase straight away.</p>
+        <form id="petForm" novalidate>
+          <label class="field">
+            <span>Name</span>
+            <input id="fName" name="name" type="text" maxlength="60" placeholder="e.g. Biscuit" autocomplete="off" required>
+          </label>
+          <div class="row">
+            <label class="field">
+              <span>Species</span>
+              <select id="fSpecies" name="species">
+                <option value="dog">Dog</option>
+                <option value="cat">Cat</option>
+                <option value="bird">Bird</option>
+                <option value="rabbit">Rabbit</option>
+                <option value="other" selected>Other</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Age (years)</span>
+              <input id="fAge" name="age" type="number" min="0" max="30" step="1" placeholder="0–30" required>
+            </label>
+          </div>
+          <fieldset class="field seg">
+            <legend>Adoption status</legend>
+            <label><input type="radio" name="adopted" value="false" checked><span>Available</span></label>
+            <label><input type="radio" name="adopted" value="true"><span>Adopted</span></label>
+          </fieldset>
+          <div class="form-actions">
+            <button class="btn btn-primary" type="submit" id="saveBtn">Save pet</button>
+            <button class="btn btn-ghost" type="button" id="cancelEdit" hidden>Cancel edit</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="registry-table">
+        <div class="panel-head">
+          <div>
+            <h2>Pet registry</h2>
+            <p class="sub">Edit a row in place, change adoption status, or remove a record.</p>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table id="petTable">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Species</th>
+                <th scope="col">Age</th>
+                <th scope="col">Status</th>
+                <th scope="col">Registered</th>
+                <th scope="col" class="actions-col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>PetCare – Full-Stack Pet Shelter &amp; Adoption Management. Node.js, Express and MongoDB.</p>
+  </footer>
+
+  <div class="toasts" id="toasts" role="status" aria-live="polite" aria-atomic="false"></div>
+  <script src="app.js"></script>
+</body>
+</html>
